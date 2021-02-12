@@ -1,0 +1,16 @@
+SELECT TripId,
+	FirstName+' '+ISNULL(MiddleName+' ','')+LastName AS [FullName],
+	ac.Name [from],
+	hc.Name [to],
+	CASE 
+		WHEN CancelDate IS NULL THEN CONVERT(NVARCHAR(MAX),DATEDIFF(DAY,ArrivalDate,ReturnDate))+' days'
+		ELSE 'Canceled'
+	END AS duration
+	FROM AccountsTrips act 
+	JOIN Accounts a ON a.Id=act.AccountId
+	JOIN Trips t ON act.TripId=t.Id
+	JOIN Cities ac ON a.CityId=ac.Id
+	JOIN Rooms r ON t.RoomId=r.Id
+	JOIN Hotels h ON h.Id=r.HotelId
+	JOIN Cities hc ON hc.Id=h.CityId
+	ORDER BY FullName,TripId
