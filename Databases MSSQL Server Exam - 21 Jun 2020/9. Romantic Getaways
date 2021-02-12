@@ -1,0 +1,11 @@
+SELECT AccountId,Email,ac.Name,COUNT(*)AS counts
+	FROM AccountsTrips AS act
+	JOIN Accounts AS a ON act.AccountId=a.Id
+	JOIN Cities AS ac ON ac.Id=a.CityId
+	JOIN Trips AS t ON t.Id=act.TripId
+	JOIN Rooms AS r ON r.Id=t.RoomId
+	JOIN Hotels AS h ON h.Id=r.HotelId
+	JOIN Cities AS hc ON hc.Id=h.CityId
+	WHERE hc.Id=ac.Id
+	GROUP BY AccountId,Email,ac.Name
+	ORDER BY counts DESC,AccountId
